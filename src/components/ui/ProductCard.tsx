@@ -2,27 +2,20 @@
 
 import React from "react";
 import Button from "./Button";
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  description: string;
-}
+import { Product } from "@/data/Products";
+import { useShop } from "@/contexts/ShopContext";
 
 interface ProductCardProps {
   product: Product;
-  onProductClick: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
-  product,
-  onProductClick,
-}) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const { openModal } = useShop(); // use context to open modal
+
   const handleCardClick = () => {
-    onProductClick(product);
+    openModal(product.id);
   };
+
   return (
     <div
       className="group bg-white rounded-2xl shadow-sm border border-gray-100/50 overflow-hidden hover:shadow-2xl hover:shadow-gray-200/40 transition-all duration-500 cursor-pointer backdrop-blur-sm"
@@ -35,7 +28,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
           alt={product.name}
           className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
         />
-
         {/* Subtle overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       </div>
@@ -47,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {product.name}
         </h3>
 
-        {/* Price with enhanced styling */}
+        {/* Price */}
         <div className="mb-3">
           <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             ${product.price}
