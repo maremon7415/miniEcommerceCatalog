@@ -52,7 +52,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </p>
 
         {/* Add to Cart Button */}
-        <Button button={{ name: "Add To Cart" }} />
+        <Button label={"Add To Cart"} />
       </div>
     </div>
   );
