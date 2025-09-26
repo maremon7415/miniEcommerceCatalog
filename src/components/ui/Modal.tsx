@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FiX,
   FiHeart,
@@ -11,6 +11,7 @@ import {
 } from "react-icons/fi";
 import Button from "./Button";
 import { useShop } from "@/contexts/ShopContext";
+import Image from "next/image";
 
 const features = [
   {
@@ -24,6 +25,7 @@ const features = [
 
 const Modal: React.FC = () => {
   const { selectedProduct, closeModal } = useShop();
+  const [quantity, setQuantity] = useState(1);
 
   // Close modal with ESC key + lock scroll when open
   useEffect(() => {
@@ -31,7 +33,6 @@ const Modal: React.FC = () => {
       if (e.key === "Escape") closeModal();
     };
     document.addEventListener("keydown", handleEscape);
-
     if (selectedProduct) document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", handleEscape);
@@ -40,11 +41,14 @@ const Modal: React.FC = () => {
   }, [closeModal, selectedProduct]);
 
   if (!selectedProduct) return null;
-
   const product = selectedProduct;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+    >
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
@@ -52,7 +56,7 @@ const Modal: React.FC = () => {
       />
 
       {/* Modal Container */}
-      <div className="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-4xl w-full animate-in zoom-in-95 duration-300">
+      <div className="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-4xl w-full animate-in zoom-in-95 duration-300 overflow-hidden">
         {/* Close Button */}
         <button
           onClick={closeModal}
@@ -62,13 +66,15 @@ const Modal: React.FC = () => {
         </button>
 
         {/* Modal Body */}
-        <div className="grid md:grid-cols-2 max-h-[85vh] overflow-y-auto md:overflow-y-visible rounded-2xl gap-3 sm:gap-4">
+        <div className="grid md:grid-cols-2 max-h-[85vh] md:overflow-y-visible overflow-y-auto gap-3 sm:gap-4">
           {/* Left: Product Image */}
-          <div className="relative bg-gradient-to-br from-gray-50 to-gray-100/50 flex items-center justify-center p-4 sm:p-6">
-            <img
+          <div className="relative bg-gradient-to-br from-gray-50 to-gray-100/50 flex items-center justify-center p-4 sm:p-6 h-64 sm:h-80 md:h-[26rem] lg:h-96">
+            <Image
               src={product.image}
               alt={product.name}
-              className="w-full h-48 sm:h-56 md:h-64 lg:h-80 object-contain rounded-2xl shadow-lg"
+              fill
+              className="object-contain rounded-2xl shadow-lg"
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
             {/* Wishlist */}
             <button className="absolute top-3 left-3 sm:top-5 sm:left-5 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:scale-110 transition-all duration-200">
@@ -80,12 +86,12 @@ const Modal: React.FC = () => {
           <div className="p-4 sm:p-5 md:p-6 flex flex-col justify-between">
             <div>
               {/* Title */}
-              <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 sm:mb-3 leading-snug">
+              <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-3 leading-snug">
                 {product.name}
               </h1>
 
               {/* Rating */}
-              <div className="flex items-center gap-2 mb-3 sm:mb-4">
+              <div className="flex items-center gap-2 mb-4">
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <FiStar
@@ -105,7 +111,7 @@ const Modal: React.FC = () => {
               </div>
 
               {/* Price */}
-              <div className="mb-3 sm:mb-4">
+              <div className="mb-4">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     ${product.price}
@@ -123,7 +129,7 @@ const Modal: React.FC = () => {
               </div>
 
               {/* Description */}
-              <div className="mb-3 sm:mb-4">
+              <div className="mb-4">
                 <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1">
                   Description
                 </h3>
@@ -133,11 +139,11 @@ const Modal: React.FC = () => {
               </div>
 
               {/* Features */}
-              <div className="mb-4 sm:mb-5">
+              <div className="mb-5">
                 <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1">
                   Features
                 </h3>
-                <div className="grid gap-1.5 sm:gap-2">
+                <div className="grid gap-2">
                   {features.map(({ icon: Icon, text, color }, i) => (
                     <div
                       key={i}
@@ -152,25 +158,31 @@ const Modal: React.FC = () => {
             </div>
 
             {/* Actions */}
-            <div className="space-y-2 sm:space-y-3 pt-3 border-t border-gray-100">
+            <div className="space-y-3 pt-3 border-t border-gray-100">
               {/* Quantity Selector */}
               <div className="flex items-center gap-3">
                 <span className="text-xs font-medium text-gray-700">Qty:</span>
                 <div className="flex items-center border border-gray-300 rounded-lg">
-                  <button className="px-2 py-1 text-gray-600 hover:bg-gray-100">
+                  <button
+                    className="px-2 py-1 text-gray-600 hover:bg-gray-100"
+                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  >
                     -
                   </button>
                   <span className="px-3 py-1 border-x border-gray-300 text-sm">
-                    1
+                    {quantity}
                   </span>
-                  <button className="px-2 py-1 text-gray-600 hover:bg-gray-100">
+                  <button
+                    className="px-2 py-1 text-gray-600 hover:bg-gray-100"
+                    onClick={() => setQuantity((q) => q + 1)}
+                  >
                     +
                   </button>
                 </div>
               </div>
 
               {/* Buy Button */}
-              <Button button={{ name: "Buy Now" }} />
+              <Button label="Buy Now" />
             </div>
           </div>
         </div>

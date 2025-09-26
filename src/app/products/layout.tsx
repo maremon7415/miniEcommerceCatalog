@@ -1,5 +1,6 @@
 import React from "react";
 
+// Layout wrapper for all /products routes
 export default function ProductsLayout({
   children,
 }: {
