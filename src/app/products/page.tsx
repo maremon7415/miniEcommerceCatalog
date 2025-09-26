@@ -13,7 +13,7 @@ export default function ProductsPage() {
     <>
       <main className="container mx-auto">
         {loading ? (
-          <Loader />
+          <Loader fullPage={true} />
         ) : (
           <div>
             <h1 className="text-2xl font-bold mb-4">Products</h1>

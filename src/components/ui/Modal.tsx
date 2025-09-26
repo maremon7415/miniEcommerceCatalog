@@ -68,12 +68,12 @@ const Modal: React.FC = () => {
         {/* Modal Body */}
         <div className="grid md:grid-cols-2 max-h-[85vh] md:overflow-y-visible overflow-y-auto gap-3 sm:gap-4">
           {/* Left: Product Image */}
-          <div className="relative bg-gradient-to-br from-gray-50 to-gray-100/50 flex items-center justify-center p-4 sm:p-6 h-64 sm:h-80 md:h-[26rem] lg:h-96">
+          <div className="relative w-full h-64 lg:my-auto mt-4 sm:h-80 md:h-[26rem] lg:h-96 bg-gradient-to-br from-gray-50 to-gray-100/50 flex items-center justify-center p-4 sm:p-6 rounded-2xl overflow-hidden">
             <Image
               src={product.image}
               alt={product.name}
               fill
-              className="object-contain rounded-2xl shadow-lg"
+              className="object-contain"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             {/* Wishlist */}
@@ -86,12 +86,12 @@ const Modal: React.FC = () => {
           <div className="p-4 sm:p-5 md:p-6 flex flex-col justify-between">
             <div>
               {/* Title */}
-              <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-3 leading-snug">
+              <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 lg:mb-3 leading-snug">
                 {product.name}
               </h1>
 
               {/* Rating */}
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-2 lg:mb-4">
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <FiStar
@@ -111,7 +111,7 @@ const Modal: React.FC = () => {
               </div>
 
               {/* Price */}
-              <div className="mb-4">
+              <div className="mb-2 lg:mb-4">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     ${product.price}
@@ -129,7 +129,7 @@ const Modal: React.FC = () => {
               </div>
 
               {/* Description */}
-              <div className="mb-4">
+              <div className="mb-2 lg:mb-4">
                 <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1">
                   Description
                 </h3>
@@ -139,7 +139,7 @@ const Modal: React.FC = () => {
               </div>
 
               {/* Features */}
-              <div className="mb-5">
+              <div className="mb-3 lg:mb-4">
                 <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1">
                   Features
                 </h3>

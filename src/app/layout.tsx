@@ -26,11 +26,15 @@ export const metadata: Metadata = {
 // Root layout wraps the entire app
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`antialiased ${geistSans?.variable ?? ""} ${
+          geistMono?.variable ?? ""
+        }`}
       >
         <ShopProvider>
           <Header />
